@@ -8,4 +8,16 @@
       <UniqueIdentifier>{0742a9d8-9697-4f7a-be40-456713ae91fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\artificial_neural_network\net_structure.hpp">
+      <Filter>include\artificial_neural_network</Filter>
+    </ClInclude>
+    <ClInclude Include="netStructureImpl.hpp" />
+    <ClInclude Include="include\artificial_neural_network\utilities.hpp">
+      <Filter>include\artificial_neural_network</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="netStructure.cpp" />
+  </ItemGroup>
 </Project>
