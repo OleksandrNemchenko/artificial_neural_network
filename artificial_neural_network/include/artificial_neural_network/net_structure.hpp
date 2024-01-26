@@ -12,6 +12,7 @@ class net_structure
 public:
     enum ESourceType { INPUTS, NEURONS, AUTO };
     enum EConnectionType { FULLY_CONNECTED, P2P_CONNECTED };
+    enum EActivationFunction : uint8_t { UNSPECIFIED = 0, IDENTITY, SIGMOID, BINARY_STEP_PARAM, BINARY_STEP, IDENTITY_PARAM, TANH, RELU, RELU_PARAM, SOFTPLUS, ELU, ELU_PARAM, SELU, LRELU, SILU, GAUSSIAN, SOFTMAX, ACTIVATION_FUNCTIONS_AMOUNT };
 
     static std::unique_ptr<net_structure> Make(size_t inputsAmount, size_t outputsAmount);
     static std::unique_ptr<net_structure> Make(const std::unique_ptr<net_structure>& network);
@@ -22,18 +23,24 @@ public:
     virtual size_t NeuronsAmount() const noexcept = 0;
     virtual size_t CurLayerNeuronsAmount() const noexcept = 0;
 
-    void AddP2PNeuronsLayer()                               { AddP2PNeuronsLayer(ESourceType::AUTO); }
-    void AddFullyConnectedNeuronsLayer()                    { AddFullyConnectedNeuronsLayer(ESourceType::AUTO); }
-    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd) { AddFullyConnectedNeuronsLayer(neuronsToAdd, ESourceType::AUTO);  }
-    virtual void AddP2PNeuronsLayer(ESourceType sourceType) = 0;
-    virtual void AddFullyConnectedNeuronsLayer(ESourceType sourceType) = 0;
-    virtual void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType) = 0;
-    virtual void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType) = 0;
-    virtual void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd) = 0;
+    void AddP2PNeuronsLayer()                               { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
+    void AddFullyConnectedNeuronsLayer()                    { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
+    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd) { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, ESourceType::AUTO);  }
+    void AddP2PNeuronsLayer(ESourceType sourceType)         { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
+    void AddFullyConnectedNeuronsLayer(ESourceType sourceType)                      { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
+    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType) { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, sourceType); }
+    void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType)                        { AddNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType, connectionType); }
+    void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd)   { AddNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType, connectionType, neuronsToAdd); }
+    void AddOutputLayer()                                                       { return AddOutputLayer(ESourceType::AUTO, EConnectionType::FULLY_CONNECTED);  }
+    void AddOutputLayer(EActivationFunction activationFunction)                 { return AddOutputLayer(activationFunction, ESourceType::AUTO, EConnectionType::FULLY_CONNECTED); }
+    void AddOutputLayer(ESourceType sourceType, EConnectionType connectionType) { return AddOutputLayer(EActivationFunction::UNSPECIFIED, sourceType, connectionType); }
 
-    void AddOutputLayer() { return AddOutputLayer(ESourceType::AUTO, EConnectionType::FULLY_CONNECTED);  }
-    void AddOutputLayer(EConnectionType connectionType) { return AddOutputLayer(ESourceType::AUTO, connectionType);  }
-    virtual void AddOutputLayer(ESourceType sourceType, EConnectionType connectionType) = 0;
+    virtual void AddP2PNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType) = 0;
+    virtual void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType) = 0;
+    virtual void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, size_t neuronsToAdd, ESourceType sourceType) = 0;
+    virtual void AddNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType) = 0;
+    virtual void AddNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd) = 0;
+    virtual void AddOutputLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType) = 0;
     virtual void SetLastLayerAsOutput() = 0;
 };
 

@@ -58,27 +58,33 @@ size_t CNetStructureImpl::CurLayerNeuronsAmount() const noexcept
     return (_layers.end() - 1)->_amount;
 }
 
-void CNetStructureImpl::AddP2PNeuronsLayer(ESourceType sourceType)
+void CNetStructureImpl::AddP2PNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType)
 {
-    AddNeuronsLayer(sourceType, EConnectionType::P2P_CONNECTED);
+    AddNeuronsLayer(activationFunction, sourceType, EConnectionType::P2P_CONNECTED);
 }
 
-void CNetStructureImpl::AddFullyConnectedNeuronsLayer(ESourceType sourceType)
+void CNetStructureImpl::AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType)
 {
-    AddNeuronsLayer(sourceType, EConnectionType::FULLY_CONNECTED);
+    AddNeuronsLayer(activationFunction, sourceType, EConnectionType::FULLY_CONNECTED);
 }
 
-void CNetStructureImpl::AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType)
+void CNetStructureImpl::AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, size_t neuronsToAdd, ESourceType sourceType)
 {
-    AddNeuronsLayer(sourceType, EConnectionType::FULLY_CONNECTED, neuronsToAdd);
+    AddNeuronsLayer(activationFunction, sourceType, EConnectionType::FULLY_CONNECTED, neuronsToAdd);
 }
 
-void CNetStructureImpl::AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType)
+void CNetStructureImpl::AddNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType)
 {
-    AddNeuronsLayer(sourceType, connectionType, CurLayerNeuronsAmount());
+    AddNeuronsLayer(activationFunction, sourceType, connectionType, CurLayerNeuronsAmount());
 }
 
-void CNetStructureImpl::AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd)
+void CNetStructureImpl::AddOutputLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType)
+{
+    AddNeuronsLayer(activationFunction, sourceType, connectionType, OutputsAmount());
+    SetLastLayerAsOutput();
+}
+
+void CNetStructureImpl::AddNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd)
 {
     checkCondition(!_layers.empty() || (sourceType == INPUTS || sourceType == AUTO), std::logic_error, "first layer has not to be connected to neurons");
 
@@ -116,9 +122,11 @@ void CNetStructureImpl::AddNeuronsLayer(ESourceType sourceType, EConnectionType 
     {
         SNeuron neuron;
 
+        neuron._activationFunction = activationFunction;
+        neuron._layerNeuronPosition = i;
         neuron._inputsAmount = static_cast<decltype(SNeuron::_inputsAmount)>(inputsAmount);
-
         neuron._firstInputOff = static_cast<decltype(SNeuron::_firstInputOff)>(_inputsOff.size());
+
         for (size_t j = 0; j < inputsAmount; ++j)
         {
             TOffset inputOff = static_cast<TOffset>(firstStateAsInputOff + j);
@@ -141,12 +149,6 @@ void CNetStructureImpl::AddNeuronsLayer(ESourceType sourceType, EConnectionType 
 
         _neurons.emplace_back(std::move(neuron));
     }
-}
-
-void CNetStructureImpl::AddOutputLayer(ESourceType sourceType, EConnectionType connectionType)
-{
-    AddNeuronsLayer(sourceType, connectionType, OutputsAmount());
-    SetLastLayerAsOutput();
 }
 
 void CNetStructureImpl::SetLastLayerAsOutput()

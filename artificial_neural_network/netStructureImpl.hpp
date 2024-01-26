@@ -26,12 +26,12 @@ public:
     size_t ConfigsAmount() const noexcept { return _configsSize; }
     size_t StatesAmount() const noexcept { return _statesSize; }
 
-    void AddP2PNeuronsLayer(ESourceType sourceType) override;
-    void AddFullyConnectedNeuronsLayer(ESourceType sourceType) override;
-    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType) override;
-    void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType) override;
-    void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd) override;
-    void AddOutputLayer(ESourceType sourceType, EConnectionType connectionType) override;
+    void AddP2PNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType) override;
+    void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType) override;
+    void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, size_t neuronsToAdd, ESourceType sourceType) override;
+    void AddNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType) override;
+    void AddNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd) override;
+    void AddOutputLayer(EActivationFunction activationFunction, ESourceType sourceType, EConnectionType connectionType) override;
     void SetLastLayerAsOutput() override;
 
 private:
@@ -39,6 +39,8 @@ private:
 
     struct SNeuron
     {
+        EActivationFunction _activationFunction;
+        TOffset _layerNeuronPosition;
         TOffset _inputsAmount;
         TOffset _firstInputOff;
         TOffset _firstConfigOff;
