@@ -23,6 +23,27 @@ using namespace std::string_literals;
     }                                                                                   \
     while(0)
 
+/* static */ const std::unordered_map<CNetStructureImpl::EActivationFunction, std::string> CNetStructureImpl::_activationFunctStr =
+{
+    { UNSPECIFIED,       "unspecified"s    },
+    { IDENTITY,          "identity"s       },
+    { SIGMOID,           "sigmoid"s        },
+    { BINARY_STEP,       "binary_step"s    },
+    { BINARY_STEP_PARAM, "binary_step"s    },
+    { IDENTITY_PARAM,    "identity_param"s },
+    { TANH,              "tanh"s           },
+    { RELU,              "relu"s           },
+    { RELU_PARAM,        "relu_param ram"s },
+    { SOFTPLUS,          "softplus"s       },
+    { ELU,               "elu"s            },
+    { ELU_PARAM,         "elu_param"s      },
+    { SELU,              "selu"s           },
+    { LRELU,             "lrelu"s          },
+    { SILU,              "silu"s           },
+    { GAUSSIAN,          "gaussian"s       },
+    { SOFTMAX,           "softmax"s        }
+};
+
 /* static */ std::unique_ptr<net_structure> net_structure::Make(size_t inputsAmount, size_t outputsAmount)
 {
     return std::make_unique<CNetStructureImpl>(inputsAmount, outputsAmount);
@@ -30,6 +51,8 @@ using namespace std::string_literals;
 CNetStructureImpl::CNetStructureImpl(size_t inputsAmount, size_t outputsAmount):
     _inputs(inputsAmount), _outputs(outputsAmount)
 {
+    assert(CNetStructureImpl::_activationFunctStr.size() == CNetStructureImpl::EActivationFunction::ACTIVATION_FUNCTIONS_AMOUNT);
+
     checkCondition(inputsAmount, std::out_of_range, "inputs amount has to be more than zero");
     checkCondition(outputsAmount, std::out_of_range, "outputs amount has to be more than zero");
 }
@@ -48,6 +71,53 @@ CNetStructureImpl::CNetStructureImpl(const std::unique_ptr<net_structure>& netwo
     _inputsOff = net._inputsOff;
     _configsSize = net._configsSize;
     _statesSize = net._statesSize;
+}
+
+/* static */ std::unique_ptr<net_structure> net_structure::Make(const nlohmann::json& network)
+{
+    return std::make_unique<CNetStructureImpl>(network);
+}
+CNetStructureImpl::CNetStructureImpl(const nlohmann::json& network)
+{
+    const nlohmann::json& settings = network.at("data version 1");
+
+    _inputs = settings.at("inputs");
+    _outputs = settings.at("outputs");
+    _configsSize = settings.at("configs size");
+    _statesSize = settings.at("states size");
+
+    _inputsOff.reserve(settings.at("inputs offsets").size());
+    for (const auto& off : settings.at("inputs offsets"))
+        _inputsOff.emplace_back(off);
+
+    _layers.reserve(settings.at("layers").size());
+    for (const nlohmann::json& layer : settings.at("layers"))
+    {
+        SRange range;
+
+        range._first = layer.at("first");
+        range._amount = layer.at("amount");
+
+        _layers.emplace_back(std::move(range));
+    }
+
+    _neurons.reserve(settings.at("neurons").size());
+    for (const nlohmann::json& neuronJson : settings.at("neurons"))
+    {
+        SNeuron neuron;
+
+        for (const auto& actFunct : _activationFunctStr)
+            if (actFunct.second == neuronJson.at("activation function").get<std::string>())
+                neuron._activationFunction = actFunct.first;
+
+        neuron._layerNeuronPosition = neuronJson.at("layer neuron position");
+        neuron._inputsAmount = neuronJson.at("inputs amount");
+        neuron._firstInputOff = neuronJson.at("first input offset");
+        neuron._firstConfigOff = neuronJson.at("first config offset");
+        neuron._stateOff = neuronJson.at("state offset");
+
+        _neurons.emplace_back(std::move(neuron));
+    }
 }
 
 size_t CNetStructureImpl::CurLayerNeuronsAmount() const noexcept
@@ -188,4 +258,44 @@ size_t CNetStructureImpl::WeightOffset(size_t neuronPos, size_t inputPos) const
     checkCondition(inputPos < neuron._inputsAmount, std::out_of_range, "input position "s + std::to_string(inputPos) + " for neuron "s + std::to_string(neuronPos) + " has to be less that the inputs amount "s + std::to_string(neuron._inputsAmount) + " for this neuron"s);
 
     return neuron._firstConfigOff + inputPos;
+}
+
+nlohmann::json CNetStructureImpl::Export() const noexcept
+{
+    nlohmann::json generalResult;
+    nlohmann::json& result = generalResult["data version 1"];
+
+    nlohmann::json& neurons = result["neurons"];
+    for (const SNeuron& neuron : _neurons)
+    {
+        nlohmann::json neuronJson;
+
+        neuronJson["activation function"] = _activationFunctStr.at(neuron._activationFunction);
+        neuronJson["layer neuron position"] = neuron._layerNeuronPosition;
+        neuronJson["inputs amount"] = neuron._inputsAmount;
+        neuronJson["first input offset"] = neuron._firstInputOff;
+        neuronJson["first config offset"] = neuron._firstConfigOff;
+        neuronJson["state offset"] = neuron._stateOff;
+
+        neurons.emplace_back(std::move(neuronJson));
+    }
+
+    nlohmann::json& layers = result["layers"];
+    for (const SRange& layer : _layers)
+    {
+        nlohmann::json layerJson;
+
+        layerJson["first"] = layer._first;
+        layerJson["amount"] = layer._amount;
+
+        layers.emplace_back(std::move(layerJson));
+    }
+
+    result["inputs offsets"] = _inputsOff;
+    result["configs size"] = _configsSize;
+    result["states size"] = _statesSize;
+    result["inputs"] = _inputs;
+    result["outputs"] = _outputs;
+
+    return generalResult;
 }

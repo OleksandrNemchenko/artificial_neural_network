@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <artificial_neural_network/net_structure.hpp>
+#include <nlohmann/json.hpp>
 
 namespace artificial_neural_network
 {
@@ -17,7 +18,10 @@ class CNetStructureImpl : public net_structure
 public:
     CNetStructureImpl(size_t inputsAmount, size_t outputsAmount);
     CNetStructureImpl(const std::unique_ptr<net_structure>& network);
+    CNetStructureImpl(const nlohmann::json& network);
     ~CNetStructureImpl() noexcept override = default;
+
+    nlohmann::json Export() const noexcept override;
 
     size_t InputsAmount() const noexcept override  { return _inputs; }
     size_t OutputsAmount() const noexcept override { return _outputs; }
@@ -59,8 +63,9 @@ private:
     static constexpr size_t _configsPerNeuron = _actFunctWordsAmount + _actFunctParam1WordsAmount + _actFunctParam2WordsAmount;
     static constexpr TOffset _externalDirBit = static_cast<TOffset>(1LL << (sizeof(TOffset) * 8 - 1));
     static constexpr TOffset _offsetMask = _externalDirBit - 1;
-    const size_t _inputs;
-    const size_t _outputs;
+    static const std::unordered_map<EActivationFunction, std::string> _activationFunctStr;
+    size_t _inputs;
+    size_t _outputs;
 
     std::vector<SNeuron> _neurons;
     std::vector<SRange> _layers;

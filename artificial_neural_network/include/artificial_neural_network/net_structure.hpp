@@ -4,6 +4,8 @@
 
 #include <memory>
 
+#include <nlohmann/json.hpp>
+
 namespace artificial_neural_network
 {
 
@@ -16,17 +18,21 @@ public:
 
     static std::unique_ptr<net_structure> Make(size_t inputsAmount, size_t outputsAmount);
     static std::unique_ptr<net_structure> Make(const std::unique_ptr<net_structure>& network);
+    static std::unique_ptr<net_structure> Make(const nlohmann::json& network);
     virtual ~net_structure() noexcept = default;
+
+    virtual nlohmann::json Export() const noexcept = 0;
 
     virtual size_t InputsAmount() const noexcept = 0;
     virtual size_t OutputsAmount() const noexcept = 0;
     virtual size_t NeuronsAmount() const noexcept = 0;
     virtual size_t CurLayerNeuronsAmount() const noexcept = 0;
 
-    void AddP2PNeuronsLayer()                               { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
-    void AddFullyConnectedNeuronsLayer()                    { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
-    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd) { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, ESourceType::AUTO);  }
-    void AddP2PNeuronsLayer(ESourceType sourceType)         { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
+    void AddP2PNeuronsLayer()                                                       { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
+    void AddP2PNeuronsLayer(ESourceType sourceType)                                 { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
+    void AddFullyConnectedNeuronsLayer()                                            { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
+    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd)                         { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, ESourceType::AUTO);  }
+    void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction)      { AddFullyConnectedNeuronsLayer(activationFunction, ESourceType::AUTO); }
     void AddFullyConnectedNeuronsLayer(ESourceType sourceType)                      { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
     void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType) { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, sourceType); }
     void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType)                        { AddNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType, connectionType); }
