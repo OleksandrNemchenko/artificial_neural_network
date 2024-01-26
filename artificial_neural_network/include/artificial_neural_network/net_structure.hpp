@@ -34,7 +34,8 @@ public:
     void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd)                         { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, ESourceType::AUTO);  }
     void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction)      { AddFullyConnectedNeuronsLayer(activationFunction, ESourceType::AUTO); }
     void AddFullyConnectedNeuronsLayer(ESourceType sourceType)                      { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
-    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType) { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, sourceType); }
+    void AddFullyConnectedNeuronsLayer(size_t neuronsToAdd, ESourceType sourceType)                 { AddFullyConnectedNeuronsLayer(EActivationFunction::UNSPECIFIED, neuronsToAdd, sourceType); }
+    void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, size_t neuronsToAdd) { AddFullyConnectedNeuronsLayer(activationFunction, neuronsToAdd, ESourceType::AUTO); }
     void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType)                        { AddNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType, connectionType); }
     void AddNeuronsLayer(ESourceType sourceType, EConnectionType connectionType, size_t neuronsToAdd)   { AddNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType, connectionType, neuronsToAdd); }
     void AddOutputLayer()                                                       { return AddOutputLayer(ESourceType::AUTO, EConnectionType::FULLY_CONNECTED);  }
