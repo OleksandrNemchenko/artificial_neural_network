@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="nlohmann\nlohmann_json.natvis" />
+    <Natvis Include="nlohmann_json.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

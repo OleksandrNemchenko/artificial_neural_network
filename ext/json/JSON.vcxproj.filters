@@ -158,5 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="nlohmann\nlohmann_json.natvis" />
+    <Natvis Include="nlohmann_json.natvis" />
   </ItemGroup>
 </Project>
