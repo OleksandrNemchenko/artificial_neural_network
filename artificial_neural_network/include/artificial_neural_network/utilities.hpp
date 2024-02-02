@@ -8,7 +8,6 @@ namespace artificial_neural_network
 {
 
 using data_type = double;
-using fitness_funct_type = double;
 using offset_type = size_t;
 
 using datas_type = std::vector<data_type>;

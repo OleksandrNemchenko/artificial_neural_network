@@ -12,12 +12,13 @@ namespace artificial_neural_network
 
 class CNetStructureImpl : public net_structure
 {
-    friend class CCalcNetImpl;
-    friend class CGeneticAlgorithmImpl;
+    friend class CDeepLearningImpl;
+    friend class CGeneticAlgorithm;
+    friend class CBackPropagation;
 
 public:
     CNetStructureImpl(size_t inputsAmount, size_t outputsAmount);
-    CNetStructureImpl(const std::unique_ptr<net_structure>& network);
+    CNetStructureImpl(const net_structure& network);
     CNetStructureImpl(const nlohmann::json& network);
     ~CNetStructureImpl() noexcept override = default;
 

@@ -57,14 +57,14 @@ CNetStructureImpl::CNetStructureImpl(size_t inputsAmount, size_t outputsAmount):
     checkCondition(outputsAmount, std::out_of_range, "outputs amount has to be more than zero");
 }
 
-/* static */ std::unique_ptr<net_structure> net_structure::Make(const std::unique_ptr<net_structure>& network)
+/* static */ std::unique_ptr<net_structure> net_structure::Make(const net_structure& network)
 {
     return std::make_unique<CNetStructureImpl>(network);
 }
-CNetStructureImpl::CNetStructureImpl(const std::unique_ptr<net_structure>& network):
-    _inputs(static_cast<const CNetStructureImpl&>(*network)._inputs), _outputs(static_cast<const CNetStructureImpl&>(*network)._outputs)
+CNetStructureImpl::CNetStructureImpl(const net_structure& network):
+    _inputs(static_cast<const CNetStructureImpl&>(network)._inputs), _outputs(static_cast<const CNetStructureImpl&>(network)._outputs)
 {
-    const CNetStructureImpl& net = static_cast<const CNetStructureImpl&>(*network);
+    const CNetStructureImpl& net = static_cast<const CNetStructureImpl&>(network);
 
     _neurons = net._neurons;
     _layers = net._layers;
