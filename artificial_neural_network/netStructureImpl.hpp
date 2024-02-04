@@ -58,10 +58,11 @@ private:
         TOffset _amount;
     };
 
+    static constexpr size_t _w0 = 1;
     static constexpr size_t _actFunctWordsAmount = 1;
     static constexpr size_t _actFunctParam1WordsAmount = 1;
     static constexpr size_t _actFunctParam2WordsAmount = 1;
-    static constexpr size_t _configsPerNeuron = _actFunctWordsAmount + _actFunctParam1WordsAmount + _actFunctParam2WordsAmount;
+    static constexpr size_t _configsPerNeuron = _w0 + _actFunctWordsAmount + _actFunctParam1WordsAmount + _actFunctParam2WordsAmount;
     static constexpr TOffset _externalDirBit = static_cast<TOffset>(1LL << (sizeof(TOffset) * 8 - 1));
     static constexpr TOffset _offsetMask = _externalDirBit - 1;
     static const std::unordered_map<EActivationFunction, std::string> _activationFunctStr;
