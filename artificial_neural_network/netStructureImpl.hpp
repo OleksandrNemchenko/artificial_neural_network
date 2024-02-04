@@ -30,6 +30,7 @@ public:
     size_t CurLayerNeuronsAmount() const noexcept override;
     size_t ConfigsAmount() const noexcept { return _configsSize; }
     size_t StatesAmount() const noexcept { return _statesSize; }
+    EActivationFunction ActFunct(const std::string& str) const noexcept override;
 
     void AddP2PNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType) override;
     void AddFullyConnectedNeuronsLayer(EActivationFunction activationFunction, ESourceType sourceType) override;

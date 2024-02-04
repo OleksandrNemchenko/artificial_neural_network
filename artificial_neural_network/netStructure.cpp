@@ -106,10 +106,7 @@ CNetStructureImpl::CNetStructureImpl(const nlohmann::json& network)
     {
         SNeuron neuron;
 
-        for (const auto& actFunct : _activationFunctStr)
-            if (actFunct.second == neuronJson.at("activation function").get<std::string>())
-                neuron._activationFunction = actFunct.first;
-
+        neuron._activationFunction = ActFunct(neuronJson.at("activation function"));
         neuron._layerNeuronPosition = neuronJson.at("layer neuron position");
         neuron._inputsAmount = neuronJson.at("inputs amount");
         neuron._firstInputOff = neuronJson.at("first input offset");
@@ -298,4 +295,14 @@ nlohmann::json CNetStructureImpl::Export() const noexcept
     result["outputs"] = _outputs;
 
     return generalResult;
+}
+
+CNetStructureImpl::EActivationFunction CNetStructureImpl::ActFunct(const std::string& str) const noexcept
+{
+    for (const auto& actFunct : _activationFunctStr)
+        if (actFunct.second == str)
+            return actFunct.first;
+
+    throw std::runtime_error("Unsupported activation function "s + str);
+    return EActivationFunction::UNSPECIFIED;
 }
