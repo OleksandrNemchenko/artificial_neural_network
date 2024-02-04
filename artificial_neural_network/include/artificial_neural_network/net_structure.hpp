@@ -27,6 +27,7 @@ public:
     virtual size_t OutputsAmount() const noexcept = 0;
     virtual size_t NeuronsAmount() const noexcept = 0;
     virtual size_t CurLayerNeuronsAmount() const noexcept = 0;
+    virtual EActivationFunction ActFunct(const std::string& str) const noexcept = 0;
 
     void AddP2PNeuronsLayer()                                                       { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, ESourceType::AUTO); }
     void AddP2PNeuronsLayer(ESourceType sourceType)                                 { AddP2PNeuronsLayer(EActivationFunction::UNSPECIFIED, sourceType); }
