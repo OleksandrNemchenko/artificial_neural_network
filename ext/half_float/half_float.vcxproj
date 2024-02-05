@@ -19,23 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\artificial_neural_network\net_structure.hpp" />
-    <ClInclude Include="include\artificial_neural_network\utilities.hpp" />
-    <ClInclude Include="netStructureImpl.hpp" />
+    <ClCompile Include="halfFloat.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="netStructure.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ext\half_float\half_float.vcxproj">
-      <Project>{dea1d940-c077-42ee-be1f-882c4262f7c8}</Project>
-    </ProjectReference>
+    <ClInclude Include="halfFloat.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{AC78B591-D274-4CB7-A92B-1A397026B34D}</ProjectGuid>
-    <RootNamespace>geneticalgorithm</RootNamespace>
+    <ProjectGuid>{dea1d940-c077-42ee-be1f-882c4262f7c8}</ProjectGuid>
+    <RootNamespace>halffloat</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -84,35 +77,31 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;CL_HPP_TARGET_OPENCL_VERSION=300;CL_HPP_ENABLE_EXCEPTIONS;CL_HPP_ENABLE_SIZE_T_COMPATIBILITY;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -122,17 +111,16 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;CL_HPP_TARGET_OPENCL_VERSION=300;CL_HPP_ENABLE_EXCEPTIONS;CL_HPP_ENABLE_SIZE_T_COMPATIBILITY;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -144,14 +132,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;CL_HPP_TARGET_OPENCL_VERSION=300;CL_HPP_ENABLE_EXCEPTIONS;CL_HPP_ENABLE_SIZE_T_COMPATIBILITY;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -161,17 +149,16 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS;CL_HPP_TARGET_OPENCL_VERSION=300;CL_HPP_ENABLE_EXCEPTIONS;CL_HPP_ENABLE_SIZE_T_COMPATIBILITY;_SILENCE_CXX23_DENORM_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <TreatWarningAsError>true</TreatWarningAsError>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <artificial_neural_network/net_structure.hpp>
+#include <artificial_neural_network/utilities.hpp>
 #include <nlohmann/json.hpp>
 
 namespace artificial_neural_network
@@ -41,7 +42,7 @@ public:
     void SetLastLayerAsOutput() override;
 
 private:
-    using TOffset = size_t;
+    using TOffset = offset_type;
 
     struct SNeuron
     {

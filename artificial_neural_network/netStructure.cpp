@@ -303,6 +303,6 @@ CNetStructureImpl::EActivationFunction CNetStructureImpl::ActFunct(const std::st
         if (actFunct.second == str)
             return actFunct.first;
 
-    throw std::runtime_error("Unsupported activation function "s + str);
+    assert(false);
     return EActivationFunction::UNSPECIFIED;
 }

@@ -5,6 +5,7 @@
 #include <memory>
 
 #include <nlohmann/json.hpp>
+#include <halfFloat.hpp>
 
 namespace artificial_neural_network
 {

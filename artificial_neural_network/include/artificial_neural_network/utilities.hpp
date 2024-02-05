@@ -4,10 +4,12 @@
 
 #include <vector>
 
+#include <halfFloat.hpp>
+
 namespace artificial_neural_network
 {
 
-using data_type = double;
+using data_type = float16;
 using offset_type = size_t;
 
 using datas_type = std::vector<data_type>;
