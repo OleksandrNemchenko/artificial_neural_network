@@ -161,8 +161,8 @@ void CNetStructureImpl::AddNeuronsLayer(EActivationFunction activationFunction, 
     size_t prevLayerSize = CurLayerNeuronsAmount();
 
     SRange newLayerRange;
-    newLayerRange._first = ConvertToOffsetType(_neurons.size());
-    newLayerRange._amount = ConvertToOffsetType(neuronsToAdd);
+    newLayerRange._first = Convert<size_t, TOffset>(_neurons.size());
+    newLayerRange._amount = Convert<size_t, TOffset>(neuronsToAdd);
     _layers.emplace_back(std::move(newLayerRange));
 
     size_t inputsAmount = 0;
@@ -190,9 +190,9 @@ void CNetStructureImpl::AddNeuronsLayer(EActivationFunction activationFunction, 
         SNeuron neuron;
 
         neuron._activationFunction = activationFunction;
-        neuron._layerNeuronPosition = ConvertToOffsetType(i);
-        neuron._inputsAmount = ConvertToOffsetType(inputsAmount);
-        neuron._firstInputOff = ConvertToOffsetType(_inputsOff.size());
+        neuron._layerNeuronPosition = Convert<size_t, TOffset>(i);
+        neuron._inputsAmount = Convert<size_t, TOffset>(inputsAmount);
+        neuron._firstInputOff = Convert<size_t, TOffset>(_inputsOff.size());
 
         for (size_t j = 0; j < inputsAmount; ++j)
         {
@@ -224,7 +224,7 @@ void CNetStructureImpl::SetLastLayerAsOutput()
     checkCondition(CurLayerNeuronsAmount() == _outputs, std::out_of_range, "last neuron layer "s + std::to_string(_layers.size()) + " has to have "s + std::to_string(_outputs) + " neurons that is equal to outputs amount whereas it has "s + std::to_string(CurLayerNeuronsAmount()) + " neurons"s);
 
     for (size_t i = _neurons.size() - _outputs, j = 0; i < _neurons.size(); ++i, ++j)
-        _neurons[i]._stateOff = ConvertToOffsetType(_externalDirBit | j);
+        _neurons[i]._stateOff = Convert<size_t, TOffset>(_externalDirBit | j);
 
     _statesSize -= _outputs;
 }

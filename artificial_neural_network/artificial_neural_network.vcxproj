@@ -84,22 +84,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
