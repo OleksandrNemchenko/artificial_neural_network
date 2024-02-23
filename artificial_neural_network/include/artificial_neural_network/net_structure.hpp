@@ -15,7 +15,7 @@ class net_structure
 public:
     enum ESourceType { INPUTS, NEURONS, AUTO };
     enum EConnectionType { FULLY_CONNECTED, P2P_CONNECTED };
-    enum EActivationFunction : uint8_t { UNSPECIFIED = 0, IDENTITY, SIGMOID, BINARY_STEP_PARAM, BINARY_STEP, IDENTITY_PARAM, TANH, RELU, RELU_PARAM, SOFTPLUS, ELU, ELU_PARAM, SELU, LRELU, SILU, GAUSSIAN, SOFTMAX, ACTIVATION_FUNCTIONS_AMOUNT };
+    enum EActivationFunction : uint8_t { UNSPECIFIED = 0, IDENTITY, SIGMOID, BINARY_STEP, TANH, RELU, GELU, SOFTPLUS, ELU, SELU, LRELU, PRELU, SILU, GAUSSIAN, SOFTMAX, ACTIVATION_FUNCTIONS_AMOUNT };
 
     static std::unique_ptr<net_structure> Make(size_t inputsAmount, size_t outputsAmount);
     static std::unique_ptr<net_structure> Make(const net_structure& network);
