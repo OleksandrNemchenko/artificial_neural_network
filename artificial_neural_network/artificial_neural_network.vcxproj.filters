@@ -7,6 +7,15 @@
     <Filter Include="include\artificial_neural_network">
       <UniqueIdentifier>{0742a9d8-9697-4f7a-be40-456713ae91fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="includeInternal">
+      <UniqueIdentifier>{29002bdc-536f-4ba6-b2a5-c840ac0af070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="includeInternal\artificial_neural_network_internal">
+      <UniqueIdentifier>{34016c06-efe9-4683-bf57-5f8ca44bd5c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="openCl">
+      <UniqueIdentifier>{e8f18201-1825-42f4-a844-7dd7b49f9813}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\artificial_neural_network\net_structure.hpp">
@@ -16,8 +25,41 @@
     <ClInclude Include="include\artificial_neural_network\utilities.hpp">
       <Filter>include\artificial_neural_network</Filter>
     </ClInclude>
+    <ClInclude Include="include\artificial_neural_network\net_calculation.hpp">
+      <Filter>include\artificial_neural_network</Filter>
+    </ClInclude>
+    <ClInclude Include="netCalculationImpl.hpp" />
+    <ClInclude Include="includeInternal\artificial_neural_network_internal\utilities.hpp">
+      <Filter>includeInternal\artificial_neural_network_internal</Filter>
+    </ClInclude>
+    <ClInclude Include="includeInternal\artificial_neural_network_internal\openClHidings.hpp">
+      <Filter>includeInternal\artificial_neural_network_internal</Filter>
+    </ClInclude>
+    <ClInclude Include="openCl\openClCodeSrc.hpp">
+      <Filter>openCl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="netStructure.cpp" />
+    <ClCompile Include="utilities.cpp" />
+    <ClCompile Include="netCalculation.cpp" />
+    <ClCompile Include="openCl\openClCode.cpp">
+      <Filter>openCl</Filter>
+    </ClCompile>
+    <ClCompile Include="openCl\openClCodePattern.cpp">
+      <Filter>openCl</Filter>
+    </ClCompile>
+    <ClCompile Include="openCl\openClCodeSrc.cpp">
+      <Filter>openCl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\make_code.py" />
+    <None Include="openCl\make_opencl_code.py">
+      <Filter>openCl</Filter>
+    </None>
+    <None Include="openCl\.gitignore">
+      <Filter>openCl</Filter>
+    </None>
   </ItemGroup>
 </Project>

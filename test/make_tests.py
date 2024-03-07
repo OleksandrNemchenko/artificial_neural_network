@@ -59,6 +59,7 @@ if __name__ == "__main__":
             
             process_file("tests.cpp", "FEED_FORWARD_1_JSON", "feedForward1.json", "tests.cpp" )
             process_file("tests.cpp", "FEED_FORWARD_2_JSON", "feedForward2.json", "tests.cpp" )
+            process_file("tests.cpp", "FEED_FORWARD_3_JSON", "feedForward3.json", "tests.cpp" )
 
     except Exception as err:
         print(f"*** Error occured: {err}")

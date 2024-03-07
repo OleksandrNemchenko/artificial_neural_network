@@ -27,41 +27,58 @@ void CheckConfig(const json& testConfig)
     auto netStruct = net_structure::make(testConfig["structure"]);
     auto netCalc = net_calculation::make(netStruct);
 
-    std::vector<long double> config;
-    for (const auto& configValue : testConfig["net configurations"])
+    ext_data_array config = net_calculation::make_net_configs(netStruct, testConfig["net configurations"]);
+
+    struct STest
     {
-        if (configValue.is_number())
-            config.emplace_back(configValue);
-        else if (configValue.is_string())
-            config.emplace_back(ActFunctCode(configValue));
-    }
+        ext_data_array _inputs;
+        ext_data_array _expectedOutputs;
+        ext_data_array _actualOutputs;
+        long double _allowedError;
+    };
+    std::vector<STest> tests;
 
-    while (!netCalc->initialized())
-        std::this_thread::sleep_for(std::chrono::milliseconds{ 50 });
-
+    ext_data_arrays inputs;
     for (const auto& testSample : testConfig["test samples"])
     {
 #ifdef _DEBUG
         const std::string testSampleStr = testSample.dump(4);
 #endif // _DEBUG
-        std::vector<long double> inputs = testSample["inputs"].get<std::vector<long double>>();
-        
-        const std::vector<long double>& expectedOutputs = testSample["outputs"].get<std::vector<long double>>();
 
-        const std::vector<long double> actualOutputs = netCalc->calculate(inputs, config);
+        STest test;
 
-        const long double testError = testSample["error"];
-        Test([&expectedOutputs, &actualOutputs, testError]()
-        {
-            if (expectedOutputs.size() != actualOutputs.size())
+        test._inputs = testSample["inputs"].get<std::vector<ext_data_type>>();
+        test._expectedOutputs = testSample["outputs"].get<std::vector<ext_data_type>>();
+        test._allowedError = testSample["error"];
+
+        inputs.emplace_back(test._inputs);
+        tests.emplace_back(std::move(test));
+    }
+
+    while (!netCalc->initialized())
+        std::this_thread::sleep_for(std::chrono::milliseconds{ 50 });
+
+    auto correctTest = [](const STest& test, const ext_data_array& actualOutputs)
+    {
+        for (size_t i = 0; i < test._expectedOutputs.size(); ++i)
+            if (std::abs(test._expectedOutputs[i] - actualOutputs[i]) > test._allowedError)
                 return false;
 
-            for (size_t i = 0; i < expectedOutputs.size(); ++i)
-                if (std::abs(expectedOutputs[i] - actualOutputs[i]) > testError)
-                    return false;
+        return true;
+    };
 
-            return true;
-        });
+    for (const STest& test : tests)
+    {
+        const ext_data_array actualOutputs = netCalc->calculate(test._inputs, config);
+        Test([&test, &actualOutputs, &correctTest]() { return correctTest(test, actualOutputs); });
+    }
+
+    ext_data_arrays outputs = netCalc->calculate(inputs, config);
+    for (size_t i = 0; i < tests.size(); ++i)
+    {
+        const STest& test = tests[i];
+        const ext_data_array& actualOutputs = outputs[i];
+        Test([&test, &actualOutputs, &correctTest]() { return correctTest(test, actualOutputs); });
     }
 
     std::cout << std::endl;
@@ -71,4 +88,47 @@ void CheckCalculations()
 {
     for (const std::string& testConfig : _testConfigs)
         CheckConfig(json::parse(testConfig));
+
+    auto feedForward1 = json::parse(_testConfigs[0]);
+    auto feedForward3 = json::parse(_testConfigs[2]);
+
+    auto netStruct = net_structure::make(feedForward1["structure"]);
+    auto netCalc = net_calculation::make(netStruct);
+
+    while (!netCalc->initialized())
+        std::this_thread::sleep_for(std::chrono::milliseconds{ 50 });
+
+    ext_data_arrays inputs;
+    inputs.emplace_back(feedForward1["test samples"][0]["inputs"].get<ext_data_array>());
+    inputs.emplace_back(feedForward1["test samples"][1]["inputs"].get<ext_data_array>());
+    inputs.emplace_back(feedForward1["test samples"][2]["inputs"].get<ext_data_array>());
+    inputs.emplace_back(feedForward1["test samples"][3]["inputs"].get<ext_data_array>());
+
+    ext_data_arrays netConfigs;
+
+    ext_data_array config;
+    netConfigs.emplace_back(net_calculation::make_net_configs(netStruct, feedForward1["net configurations"]));
+    netConfigs.emplace_back(net_calculation::make_net_configs(netStruct, feedForward3["net configurations"]));
+
+    auto actualResults = netCalc->calculate(inputs, netConfigs);
+
+    auto correctTest = [](const ext_data_array& expectedResults, const ext_data_array& actualOutputs, long double allowedError)
+    {
+        for (size_t i = 0; i < expectedResults.size(); ++i)
+            if (std::abs(expectedResults[i] - actualOutputs[i]) > allowedError)
+                return false;
+
+        return true;
+    };
+
+    size_t i = 0;
+    Test([&]() { return correctTest(feedForward1["test samples"][0]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward1["test samples"][0]["error"]); });
+    Test([&]() { return correctTest(feedForward1["test samples"][1]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward1["test samples"][1]["error"]); });
+    Test([&]() { return correctTest(feedForward1["test samples"][2]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward1["test samples"][2]["error"]); });
+    Test([&]() { return correctTest(feedForward1["test samples"][3]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward1["test samples"][3]["error"]); });
+    Test([&]() { return correctTest(feedForward3["test samples"][0]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward3["test samples"][0]["error"]); });
+    Test([&]() { return correctTest(feedForward3["test samples"][1]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward3["test samples"][1]["error"]); });
+    Test([&]() { return correctTest(feedForward3["test samples"][2]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward3["test samples"][2]["error"]); });
+    Test([&]() { return correctTest(feedForward3["test samples"][3]["outputs"].get<ext_data_array>(), actualResults[i++]._output, feedForward3["test samples"][3]["error"]); });
+
 }

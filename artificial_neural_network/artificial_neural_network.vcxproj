@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,17 +19,37 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="includeInternal\artificial_neural_network_internal\openClHidings.hpp" />
+    <ClInclude Include="includeInternal\artificial_neural_network_internal\utilities.hpp" />
+    <ClInclude Include="include\artificial_neural_network\net_calculation.hpp" />
     <ClInclude Include="include\artificial_neural_network\net_structure.hpp" />
     <ClInclude Include="include\artificial_neural_network\utilities.hpp" />
+    <ClInclude Include="netCalculationImpl.hpp" />
     <ClInclude Include="netStructureImpl.hpp" />
+    <ClInclude Include="openCl\openClCodeSrc.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="netCalculation.cpp" />
     <ClCompile Include="netStructure.cpp" />
+    <ClCompile Include="openCl\openClCode.cpp" />
+    <ClCompile Include="openCl\openClCodePattern.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="openCl\openClCodeSrc.cpp" />
+    <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ext\half_float\half_float.vcxproj">
       <Project>{dea1d940-c077-42ee-be1f-882c4262f7c8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\make_code.py" />
+    <None Include="openCl\.gitignore" />
+    <None Include="openCl\make_opencl_code.py" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -84,22 +104,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annMetaConfigurations;$(ProjectDir)includeInternal</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annMetaConfigurations;$(ProjectDir)includeInternal</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annMetaConfigurations;$(ProjectDir)includeInternal</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annDataTypes</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)include;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include;$(SolutionDir)annMetaConfigurations;$(ProjectDir)includeInternal</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
   </PropertyGroup>
@@ -119,6 +139,16 @@
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)openCl\make_opencl_code.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --opencl_dir $(ProjectDir)openCl ^
+    --ann_meta_configurations_path $(SolutionDir)annMetaConfigurations\annMetaConfigurations.hpp ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make OpenCL code</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -141,6 +171,16 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)openCl\make_opencl_code.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --opencl_dir $(ProjectDir)openCl ^
+    --ann_meta_configurations_path $(SolutionDir)annMetaConfigurations\annMetaConfigurations.hpp ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make OpenCL code</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -158,6 +198,16 @@
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)openCl\make_opencl_code.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --opencl_dir $(ProjectDir)openCl ^
+    --ann_meta_configurations_path $(SolutionDir)annMetaConfigurations\annMetaConfigurations.hpp ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make OpenCL code</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -180,6 +230,16 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)openCl\make_opencl_code.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --opencl_dir $(ProjectDir)openCl ^
+    --ann_meta_configurations_path $(SolutionDir)annMetaConfigurations\annMetaConfigurations.hpp ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make OpenCL code</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

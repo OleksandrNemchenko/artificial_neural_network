@@ -34,5 +34,8 @@
     <None Include="tests\feedForward2.json">
       <Filter>tests</Filter>
     </None>
+    <None Include="tests\feedForward3.json">
+      <Filter>tests</Filter>
+    </None>
   </ItemGroup>
 </Project>
