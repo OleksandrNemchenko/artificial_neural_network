@@ -20,11 +20,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="starter.cpp" />
+    <ClCompile Include="tests\tests.cpp" />
+    <ClCompile Include="tests\testsPattern.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="test_calculations.cpp" />
+    <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\artificial_neural_network\artificial_neural_network.vcxproj">
       <Project>{5101ed51-8504-46f0-a77e-7460c98dd07c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tests.hpp" />
+    <ClInclude Include="test_tools.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="make_tests.py" />
+    <None Include="tests\.gitignore" />
+    <None Include="tests\feedForward1.json" />
+    <None Include="tests\feedForward2.json" />
+    <None Include="tests\tests.xlsx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -32,6 +52,7 @@
     <ProjectGuid>{b172b42b-e07e-45d5-9f21-9a151d2c56ac}</ProjectGuid>
     <RootNamespace>test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>artificial_neural_network_test</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -79,24 +100,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)artificial_neural_network\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)..\artificial_neural_network\include;$(SolutionDir)annDataTypes;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)out.Win$(Platform)\$(Configuration)\;$(SolutionDir)out.Win$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)artificial_neural_network\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)..\artificial_neural_network\include;$(SolutionDir)annDataTypes;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)out.Win$(Platform)\$(Configuration)\;$(SolutionDir)out.Win$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)artificial_neural_network\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)..\artificial_neural_network\include;$(SolutionDir)annDataTypes;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)out.Win$(Platform)\$(Configuration)\;$(SolutionDir)out.Win$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)artificial_neural_network\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)..\artificial_neural_network\include;$(SolutionDir)annDataTypes;$(ProjectDir)..\ext\half_float;$(ProjectDir)..\ext\json\include</IncludePath>
     <OutDir>$(SolutionDir)out.Win$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)out.Win$(Platform)\$(Configuration).$(ProjectName).Intermediate\</IntDir>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)out.Win$(Platform)\$(Configuration)\;$(SolutionDir)out.Win$(Platform)\$(Configuration)\</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -104,14 +129,24 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);artificial_neural_network.lib</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)make_tests.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --dir $(ProjectDir)tests ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make tests</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -121,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -131,7 +166,17 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);artificial_neural_network.lib</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)make_tests.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --dir $(ProjectDir)tests ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make tests</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -139,14 +184,24 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);artificial_neural_network.lib</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)make_tests.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --dir $(ProjectDir)tests ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make tests</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -156,7 +211,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -166,7 +221,17 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);artificial_neural_network.lib</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>python $(ProjectDir)make_tests.py ^
+    --script_path $(ProjectDir)..\make_code.py ^
+    --dir $(ProjectDir)tests ^
+    --silence</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Make tests</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

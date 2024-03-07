@@ -1,0 +1,21 @@
+{
+    "title": "Feed Forward net example 2",
+    "structure": { "data version 1":
+    {
+        "inputs": 3,
+        "layers":
+        [
+            { "type": "point to point" },
+            { "type": "fully connected", "neurons": 5, "activation function": "identity" },
+            { "type": "fully connected", "neurons": 2 }
+        ]
+    } },
+    "net configurations": [ "sigmoid", -5, 0.23, "tanh", 0.6, 13.8, "softplus", 0, 2.54, -5, 0.23, 1.2, 5.3, 5.3, -0.04, -4.6, -1, 1, 2.1, 8.9, -0.6, 0.04, 0.01, 0.02, 0.03, 25, -0.5, 0.5, 10, "identity", -5, 0.1, 0.2, 10, 0.1, 1, "softplus", -5, 0.23, 1.2, 5.3, 1.2, 5.3 ],
+    "test samples":
+    [
+        { "inputs": [   1,   -5, 0.25], "outputs": [-53.37, 146.41], "error": 0.01 },
+        { "inputs": [-0.1, 0.05, -1.1], "outputs": [107.16, 179.39], "error": 0.01 },
+        { "inputs": [   0,   -3,    2], "outputs": [-35.96, 347.19], "error": 0.01 },
+        { "inputs": [   -1,  -1,   -1], "outputs": [ -57.7,  97.29], "error": 0.01 }
+    ]
+}

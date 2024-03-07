@@ -2,5 +2,37 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="starter.cpp" />
+    <ClCompile Include="utilities.cpp" />
+    <ClCompile Include="tests\testsPattern.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\tests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="test_calculations.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="test_tools.hpp" />
+    <ClInclude Include="tests.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="tests">
+      <UniqueIdentifier>{a7ace6c1-47e2-454f-be22-3bf1fa94de78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tests\feedForward1.json">
+      <Filter>tests</Filter>
+    </None>
+    <None Include="make_tests.py" />
+    <None Include="tests\tests.xlsx">
+      <Filter>tests</Filter>
+    </None>
+    <None Include="tests\.gitignore">
+      <Filter>tests</Filter>
+    </None>
+    <None Include="tests\feedForward2.json">
+      <Filter>tests</Filter>
+    </None>
   </ItemGroup>
 </Project>
