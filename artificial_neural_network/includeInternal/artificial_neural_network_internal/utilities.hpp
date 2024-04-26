@@ -117,8 +117,8 @@ inline TDst Convert([[maybe_unused]] const TSrc value, [[maybe_unused]] long dou
 #ifdef ANN_CONVERT_ERROR_THROW
             throw std::runtime_error("Src data value "s + std::to_string(src) +
                 " after converting to the required type is equal to "s + std::to_string(dst) +
-                " and the difference " + std::to_string(diff) + " (relative one is " + s std::to_string(relativeDiff) + ") "s +
-                " is bigger that the required " + std::to_string(maxDifference) + " one";
+                " and the difference "s + std::to_string(diff) + " (relative one is "s + std::to_string(relativeDiff) + ") "s +
+                " is bigger that the required "s + std::to_string(maxDifference) + " one"s);
 #endif // ANN_CONVERT_ERROR_THROW
         }
 
