@@ -102,8 +102,12 @@ void CNetCalculationImpl::InitOpenCL()
     _neurons = _netStructure._neurons;
     _neurons.CopyToDevice();
 
-    GPU_Action( _calculateNet = FCalculateNets(_clProg, _cmdQueue, "NetCalculations"); );
-    CPU_Action( _calculateNet = FCalculateNets(openClEmulator::NetCalculations    ); );
+#ifdef ANN_GPU_CALCULATIONS
+    _calculateNet = FCalculateNets(_clProg, _cmdQueue, "NetCalculations");
+#else //ANN_GPU_CALCULATIONS
+    _calculateNet = FCalculateNets(openClEmulator::NetCalculations );
+#endif // ANN_GPU_CALCULATIONS
+
 }
 
 void CNetCalculationImpl::set_config(const ext_data_array& config)

@@ -76,7 +76,7 @@ activation_function artificial_neural_network::ActFunct(const std::string& actFu
     return reversedMap.at(actFunct);
 }
 
-#ifdef ANN_GPU_CALCULATIONS
+//#ifdef ANN_GPU_CALCULATIONS
 cl::Device FindDevice(std::string_view deviceName)
 {
     static const std::unordered_map<std::string, cl::Device> availableDevicesSt = []()
@@ -133,6 +133,6 @@ cl::Device FindDevice(std::string_view deviceName)
 
     throw std::logic_error("No "s + deviceName.data() + " GPU device has been found"s);
 }
-#endif // ANN_GPU_CALCULATIONS
+//#endif // ANN_GPU_CALCULATIONS
 
 } // namespace artificial_neural_network

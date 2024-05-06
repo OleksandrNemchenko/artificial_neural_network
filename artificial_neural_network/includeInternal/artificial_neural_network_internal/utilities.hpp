@@ -98,15 +98,17 @@ inline TDst Convert([[maybe_unused]] const TSrc value, [[maybe_unused]] long dou
 
     if constexpr (std::is_floating_point_v<TSrc>)
     {
-        const auto src = value;
-        const auto dst = static_cast<TDst>(value);
-        const auto diff = std::abs(static_cast<long double>(src) - dst);
-        const auto maxValue = std::max(static_cast<long double>(src), static_cast<long double>(dst));
+        const TSrc src = value;
+#pragma warning(disable: 4244)
+        const TDst dst = static_cast<TDst>(src);
+#pragma warning(default: 4244)
+        const long double diff = std::abs(static_cast<long double>(src) - dst);
+        const long double maxValue = std::max(static_cast<long double>(src), static_cast<long double>(dst));
 
         if (!maxValue)
             return dst;
 
-        const auto relativeDiff = diff / maxValue;
+        const long double relativeDiff = diff / maxValue;
 
         if (maxDifference != 0 && relativeDiff > maxDifference)
         {
@@ -125,7 +127,18 @@ inline TDst Convert([[maybe_unused]] const TSrc value, [[maybe_unused]] long dou
         return dst;
     }
 
-    else
+    else if constexpr (std::is_same_v<std::remove_all_extents_t<TDst>, ext_data_array>)
+    {
+        ext_data_array resArray;
+        resArray.reserve(value.size());
+
+        for (const auto res : value)
+            resArray.emplace_back(res);
+
+        return resArray;
+    }
+
+    else if constexpr (std::is_integral_v<TSrc>)
     {
         if (value > std::numeric_limits<TDst>::max())
         {
@@ -141,6 +154,8 @@ inline TDst Convert([[maybe_unused]] const TSrc value, [[maybe_unused]] long dou
         return static_cast<TDst>(value);
     }
 
+    else
+        return TDst();
 #endif // ((defined(DEBUG) || defined(_DEBUG)) && !defined(ANN_CONVERT_ERROR_ASSERT)) || (!defined(DEBUG) && !defined(_DEBUG) && !defined(ANN_CONVERT_ERROR_THROW))
 }
 
@@ -159,9 +174,9 @@ inline void CheckClError([[maybe_unused]] cl_int clError, [[maybe_unused]] const
 #endif // ANN_GPU_CALCULATIONS
 }
 
-#ifdef ANN_GPU_CALCULATIONS
+//#ifdef ANN_GPU_CALCULATIONS
 cl::Device FindDevice(std::string_view deviceName);
-#endif // ANN_GPU_CALCULATIONS
+//#endif // ANN_GPU_CALCULATIONS
 
 template <typename TData>
 class CClBuffer
